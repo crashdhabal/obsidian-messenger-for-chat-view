@@ -44,6 +44,7 @@ Select a role from the dropdown, type your message, and hit send (or press `Ente
 ```
 
 **Example Output:**
+
 <img width="642" height="80" alt="image" src="https://github.com/user-attachments/assets/a0b37c7a-e2f3-40ed-a218-fbe498f37449" />
 
 after sending, shows up as
