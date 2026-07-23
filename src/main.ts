@@ -10,9 +10,9 @@ const DEFAULT_SETTINGS: ChatboxSettings = {
 }
 
 export default class MyPlugin extends Plugin {
-    settings: ChatboxSettings;
-    floatingContainer: HTMLElement;
-    dropdown: HTMLSelectElement; // Lifted to class level so settings can update it
+    settings!: ChatboxSettings;
+    floatingContainer!: HTMLElement;
+    dropdown!: HTMLSelectElement; // Lifted to class level so settings can update it
     isInputVisible: boolean = true;
 
     // --- DRAG STATE VARIABLES ---
