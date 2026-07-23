@@ -1,8 +1,9 @@
 # Chat View Messenger for Obsidian
 
-A clean, mobile-friendly, floating chat interface for Obsidian, which uses the Chat View plugin by [adifyr](https://github.com/adifyr) as a base.
+A clean, mobile-friendly, floating chat interface for Obsidian, which uses the [Chat View plugin](https://github.com/adifyr/obsidian-chat-view) by [adifyr](https://github.com/adifyr) as a base.
 
-<img width="1366" height="725" alt="image" src="https://github.com/user-attachments/assets/1491a7f5-d776-4298-8f23-71701c0d9baf" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/1491a7f5-d776-4298-8f23-71701c0d9baf" /> <img width="300" alt="WhatsApp Image 2026-07-23 at 21 27 20" src="https://github.com/user-attachments/assets/65a9e285-9a8e-4479-b792-975da329f9a4" />
+
 
 This plugin allows you to use the power of the [Chat View plugin](https://github.com/adifyr/obsidian-chat-view) to quickly inject conversational notes, role-play dialogues, or internal monologues directly into your active Markdown file, but now with a chatbox interface, where you can choose roles, and just click send!
 
@@ -68,3 +69,5 @@ Manual Installation
 
 * **Desktop:** The chatbox floats at the bottom of your screen. Click the ribbon icon or use the command palette to toggle its visibility.
 * **Mobile:** If the chatbox is blocking your text, simply **long-press** the background of the chatbox for half a second. It will detach, allowing you to drag it up or down the screen out of your way!
+
+#### P.S. If you like the theme, I'm using [MatoTomato's](https://github.com/MatoTheTomato) [Elysian](https://github.com/matothetomato/Elysian), I love it!!
