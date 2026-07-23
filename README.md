@@ -1,5 +1,4 @@
-# Chat View Messenger for Obsidian
-
+# Messenger for chat view
 A clean, mobile-friendly, floating chat interface for Obsidian, which uses the [Chat View plugin](https://github.com/adifyr/obsidian-chat-view) by [adifyr](https://github.com/adifyr) as a base.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/1491a7f5-d776-4298-8f23-71701c0d9baf" /> <img width="300" alt="WhatsApp Image 2026-07-23 at 21 27 20" src="https://github.com/user-attachments/assets/65a9e285-9a8e-4479-b792-975da329f9a4" />
