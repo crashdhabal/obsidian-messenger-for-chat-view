@@ -9,15 +9,15 @@ const DEFAULT_SETTINGS: ChatboxSettings = {
     roles: 'me, voice in my head, chaos'
 }
 
-export default class MyPlugin extends Plugin {
+export default class ChatboxPlugin extends Plugin {
     settings!: ChatboxSettings;
     floatingContainer!: HTMLElement;
-    dropdown!: HTMLSelectElement; // Lifted to class level so settings can update it
+    dropdown!: HTMLSelectElement; 
     isInputVisible: boolean = true;
 
     // --- DRAG STATE VARIABLES ---
     isDragging: boolean = false;
-    longPressTimer: NodeJS.Timeout | null = null;
+    longPressTimer: number | null = null;
     startX: number = 0;
     startY: number = 0;
     initialLeft: number = 0;
@@ -27,23 +27,23 @@ export default class MyPlugin extends Plugin {
     handleTouchMove = (e: TouchEvent) => {
         if (!this.isDragging) return;
         
-        // Safely extract the first touch point
         const touch = e.touches[0];
         if (!touch) return; 
 
         e.preventDefault(); 
         const deltaY = touch.clientY - this.startY;
-        this.floatingContainer.style.top = `${this.initialTop + deltaY}px`;
+        this.floatingContainer.setCssProps({ top: `${this.initialTop + deltaY}px` });
     };
 
     handleMouseMove = (e: MouseEvent) => {
         if (!this.isDragging) return;
+        
         const deltaY = e.clientY - this.startY;
-        this.floatingContainer.style.top = `${this.initialTop + deltaY}px`;
+        this.floatingContainer.setCssProps({ top: `${this.initialTop + deltaY}px` });
     };
 
     stopDrag = () => {
-        if (this.longPressTimer) clearTimeout(this.longPressTimer);
+        if (this.longPressTimer) window.clearTimeout(this.longPressTimer);
         if (this.isDragging) {
             this.isDragging = false;
             this.floatingContainer.removeClass('is-dragging');
@@ -51,19 +51,16 @@ export default class MyPlugin extends Plugin {
     };
 
     async onload() {
-        // Load settings first!
         await this.loadSettings();
-
-        // Register the settings tab so it shows up in Obsidian's menu
         this.addSettingTab(new ChatboxSettingTab(this.app, this));
 
         // 1. Create the floating container
-        this.floatingContainer = document.body.createEl('div', {
+        this.floatingContainer = document.body.createDiv({
             cls: 'chatbox-floating-container'
         });
 
         // Create the grab handle
-        const dragHandle = this.floatingContainer.createEl('div', {
+        this.floatingContainer.createDiv({
             cls: 'chatbox-drag-handle'
         });
 
@@ -71,7 +68,7 @@ export default class MyPlugin extends Plugin {
         this.dropdown = this.floatingContainer.createEl('select', {
             cls: 'chatbox-dropdown'
         });
-        this.updateDropdown(); // Populate based on loaded settings
+        this.updateDropdown(); 
 
         // 3. Create the text input
         const inputField = this.floatingContainer.createEl('input', {
@@ -80,14 +77,14 @@ export default class MyPlugin extends Plugin {
             cls: 'chatbox-input'
         });
 
-        // 4. Create the Send button with an icon
+        // 4. Create the Send button
         const sendButton = this.floatingContainer.createEl('button', {
             cls: 'chatbox-send-button',
             attr: { 'aria-label': 'Send message' }
         });
         setIcon(sendButton, 'send'); 
 
-        // 5. Create the Scroll button with an icon
+        // 5. Create the Scroll button
         const scrollButton = this.floatingContainer.createEl('button', {
             cls: 'chatbox-icon-button chatbox-scroll-button', 
             attr: { 'aria-label': 'Scroll to bottom' }
@@ -101,10 +98,13 @@ export default class MyPlugin extends Plugin {
 
             const rect = this.floatingContainer.getBoundingClientRect();
             
-            this.floatingContainer.style.bottom = 'auto';
-            this.floatingContainer.style.transform = 'none';
-            this.floatingContainer.style.left = `${rect.left}px`;
-            this.floatingContainer.style.top = `${rect.top}px`;
+            // Obsidian Linter requires setCssProps instead of style object manipulation
+            this.floatingContainer.setCssProps({
+                bottom: 'auto',
+                transform: 'none',
+                left: `${rect.left}px`,
+                top: `${rect.top}px`
+            });
 
             this.startX = clientX;
             this.startY = clientY;
@@ -115,13 +115,12 @@ export default class MyPlugin extends Plugin {
         const handleInteractStart = (clientX: number, clientY: number, target: EventTarget | null) => {
             if (target instanceof HTMLInputElement || target instanceof HTMLButtonElement || target instanceof HTMLSelectElement) return;
 
-            this.longPressTimer = setTimeout(() => {
+            this.longPressTimer = window.setTimeout(() => {
                 startDrag(clientX, clientY);
             }, 400);
         };
 
         this.floatingContainer.addEventListener('touchstart', (e) => {
-            // Safely extract the first touch point
             const touch = e.touches[0];
             if (touch) {
                 handleInteractStart(touch.clientX, touch.clientY, e.target);
@@ -129,7 +128,7 @@ export default class MyPlugin extends Plugin {
         }, { passive: true });
 
         this.floatingContainer.addEventListener('touchmove', () => {
-            if (!this.isDragging && this.longPressTimer) clearTimeout(this.longPressTimer);
+            if (!this.isDragging && this.longPressTimer) window.clearTimeout(this.longPressTimer);
         }, { passive: true });
 
         this.floatingContainer.addEventListener('mousedown', (e) => {
@@ -144,17 +143,17 @@ export default class MyPlugin extends Plugin {
         document.addEventListener('mouseup', this.stopDrag);
 
         // --- MOBILE-FRIENDLY TOGGLES ---
-        this.addRibbonIcon('message-circle', 'Toggle Chat', () => {
+        this.addRibbonIcon('message-circle', 'Toggle chat', () => {
             this.isInputVisible = !this.isInputVisible;
-            this.floatingContainer.style.display = this.isInputVisible ? 'flex' : 'none';
+            this.floatingContainer.setCssProps({ display: this.isInputVisible ? 'flex' : 'none' });
         });
 
         this.addCommand({
             id: 'toggle-chat-interface',
-            name: 'Toggle Chat',
+            name: 'Toggle chat',
             callback: () => {
                 this.isInputVisible = !this.isInputVisible;
-                this.floatingContainer.style.display = this.isInputVisible ? 'flex' : 'none';
+                this.floatingContainer.setCssProps({ display: this.isInputVisible ? 'flex' : 'none' });
                 
                 if (this.isInputVisible) {
                     statusBarItem.setText('💬 Chat: ON');
@@ -200,7 +199,6 @@ export default class MyPlugin extends Plugin {
             
             const selectedRole = this.dropdown.value; 
 
-            // Timestamp Generator
             const getFormattedTime = () => {
                 const now = new Date();
                 
@@ -231,7 +229,7 @@ export default class MyPlugin extends Plugin {
             editor.replaceSelection('{{' + selectedRole + '|' + text + '|' + timestamp + '}}\n');
             inputField.value = ''; 
             
-            setTimeout(() => {
+            window.setTimeout(() => {
                 scrollToBottom();
             }, 50);
         };
@@ -252,10 +250,10 @@ export default class MyPlugin extends Plugin {
         statusBarItem.onClickEvent(() => {
             this.isInputVisible = !this.isInputVisible;
             if (this.isInputVisible) {
-                this.floatingContainer.style.display = 'flex';
+                this.floatingContainer.setCssProps({ display: 'flex' });
                 statusBarItem.setText('💬 Chat: ON');
             } else {
-                this.floatingContainer.style.display = 'none';
+                this.floatingContainer.setCssProps({ display: 'none' });
                 statusBarItem.setText('💬 Chat: OFF');
             }
         });
@@ -276,21 +274,21 @@ export default class MyPlugin extends Plugin {
 
     // --- 2. LOAD/SAVE METHODS ---
     async loadSettings() {
-        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+        // Correct casting fixes the `@typescript-eslint/no-unsafe-assignment` error
+        const loadedData = (await this.loadData()) as Partial<ChatboxSettings>;
+        this.settings = Object.assign({}, DEFAULT_SETTINGS, loadedData);
     }
 
     async saveSettings() {
         await this.saveData(this.settings);
-        this.updateDropdown(); // Refresh the UI immediately when saved
+        this.updateDropdown(); 
     }
 
     // --- HELPER: UPDATE DROPDOWN ---
     updateDropdown() {
-        this.dropdown.empty(); // Clear old options
-        // Split by comma, trim whitespace, and ignore empty entries
+        this.dropdown.empty(); 
         const roles = this.settings.roles.split(',').map(r => r.trim()).filter(r => r !== '');
         
-        // Failsafe in case they delete everything
         if (roles.length === 0) roles.push('user'); 
         
         roles.forEach(opt => {
@@ -301,9 +299,9 @@ export default class MyPlugin extends Plugin {
 
 // --- 3. SETTINGS TAB CLASS ---
 class ChatboxSettingTab extends PluginSettingTab {
-    plugin: MyPlugin;
+    plugin: ChatboxPlugin;
 
-    constructor(app: App, plugin: MyPlugin) {
+    constructor(app: App, plugin: ChatboxPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }
@@ -313,10 +311,10 @@ class ChatboxSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         new Setting(containerEl)
-            .setName('Custom Roles')
+            .setName('Custom roles')
             .setDesc('Enter your chat roles, separated by commas.')
             .addTextArea(text => text
-                .setPlaceholder('me, voice in my head, chaos')
+                .setPlaceholder('Me, voice in my head, chaos')
                 .setValue(this.plugin.settings.roles)
                 .onChange(async (value) => {
                     this.plugin.settings.roles = value;
