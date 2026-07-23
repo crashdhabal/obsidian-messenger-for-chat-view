@@ -1,7 +1,7 @@
 {
 	"name": "Messenger for chat view",
 	"version": "1.0.0",
-	"description": "Gives a messenger/chat like interface to use the chat view plugin by adifyr",
+	"description": "Gives a messenger/chat like interface to use the chat view plugin by adifyr.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
