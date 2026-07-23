@@ -306,6 +306,27 @@ class ChatboxSettingTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
+    // NEW: Declarative API for Obsidian 1.13.0+ (Enables settings search and fixes the warning)
+    getSettingDefinitions() {
+        return [
+            {
+                name: 'Custom roles',
+                desc: 'Enter your chat roles, separated by commas.',
+                // We use a render callback so we can manually call our updateDropdown() side-effect
+                render: (setting: Setting) => {
+                    setting.addTextArea(text => text
+                        .setPlaceholder('Me, voice in my head, chaos')
+                        .setValue(this.plugin.settings.roles)
+                        .onChange(async (value) => {
+                            this.plugin.settings.roles = value;
+                            await this.plugin.saveSettings();
+                        }));
+                }
+            }
+        ];
+    }
+
+    // LEGACY: Imperative API for Obsidian versions below 1.13.0
     display(): void {
         const {containerEl} = this;
         containerEl.empty();
