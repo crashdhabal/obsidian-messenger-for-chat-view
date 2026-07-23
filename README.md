@@ -53,7 +53,7 @@ after sending, shows up as
 
 ## ⚙️ Settings
 
-Go to **Settings > Chatbox Messenger** to customize your available roles. 
+Go to **Settings > Messenger for chat view** to customize your available roles. 
 Enter your desired roles separated by commas (e.g., `User, Assistant, System, Narrator`). The dropdown menu in the floating chatbox will update instantly.
 
 ## 📥 Installation
