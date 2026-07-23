@@ -1,92 +1,69 @@
-# Obsidian Sample Plugin
+# Chat View Messenger for Obsidian
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+A clean, mobile-friendly, floating chat interface for Obsidian, which uses the Chat View plugin by [adifyr](https://github.com/adifyr) as a base.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+<img width="1366" height="725" alt="image" src="https://github.com/user-attachments/assets/1491a7f5-d776-4298-8f23-71701c0d9baf" />
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
+This plugin allows you to use the power of the [Chat View plugin](https://github.com/adifyr/obsidian-chat-view) to quickly inject conversational notes, role-play dialogues, or internal monologues directly into your active Markdown file, but now with a chatbox interface, where you can choose roles, and just click send!
 
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and outputs a Notice on click.
-- Registers a global interval which logs 'setInterval' to the console.
+## ✨ Features
 
-## First time developing plugins?
+* **💬 Floating UI:** A persistent, draggable chatbox that hovers over your editor.
+* **🎭 Custom Roles:** Easily switch between different perspectives (e.g., *Me, Voice in my head, Chaos*). You can customize this list in the plugin settings.
+* **⏱️ Auto-Timestamps:** Automatically appends a formatted timestamp to every message (e.g., `19:37 23rd Jun,26`).
+* **📱 Mobile Support:** Fully responsive design that respects the Android virtual keyboard, complete with a drag-and-drop handle so it never gets in your way. (Not tested on iPhone yet!).
+* **⌨️ Quick Toggles:** Hide or show the chatbox via the Ribbon Icon, the Command Palette, or the Status Bar.
 
-Quick starting guide for new plugin devs:
+## 📝 How it Works
+First up, you will need the [Chat View plugin](https://github.com/adifyr/obsidian-chat-view) for Obsidian.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `src/main.ts` to `main.js`.
-- Make changes to `src/main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+After that, create a chat block using 
+```text
+	```chat
 
-## Releasing new releases
+	```
+```
+Now, as required, create the roles/narrators as you wish, using the Chat View's formatting rules!
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v18 (`node --version`).
-- `npm i` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint
-
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-	"fundingUrl": "https://buymeacoffee.com"
-}
+```text
+	```chat
+		(by default the text bubble is aligned left)
+		>actor 1  ---> text bubble will be aligned right
+		^actor 2  ---> text bubble in the middle
+	```
 ```
 
-If you have multiple URLs, you can also do:
+Now with these roles defined, you can go to the plugin settings of Messenger and add the roles in the list, so that they show up on the dropdown.
 
-```json
-{
-	"fundingUrl": {
-		"Buy Me a Coffee": "https://buymeacoffee.com",
-		"GitHub Sponsor": "https://github.com/sponsors",
-		"Patreon": "https://www.patreon.com/"
-	}
-}
+### NOTE: Place your cursor where your conversation is to start. Its not needed everytime, but in case you reload a note, or the app, the cursor is set to the beginning by default, so it might need to be placed where you want it.
+
+Select a role from the dropdown, type your message, and hit send (or press `Enter`). The plugin instantly injects the text into your active note using the following Chat View syntax:
+
+```text
+{{role|Your message here|HH:MM DDo Mon,YY}}
 ```
 
-## API Documentation
+**Example Output:**
+<img width="642" height="80" alt="image" src="https://github.com/user-attachments/assets/a0b37c7a-e2f3-40ed-a218-fbe498f37449" />
 
-See https://docs.obsidian.md
+after sending, shows up as
+
+<img width="269" height="119" alt="image" src="https://github.com/user-attachments/assets/5e464fa9-e235-4d4e-905f-16bf6be19bb2" />
+
+## ⚙️ Settings
+
+Go to **Settings > Chatbox Messenger** to customize your available roles. 
+Enter your desired roles separated by commas (e.g., `User, Assistant, System, Narrator`). The dropdown menu in the floating chatbox will update instantly.
+
+## 📥 Installation
+
+Manual Installation
+1. Download the latest release from the `Releases` section of this repository.
+2. Extract the `main.js`, `manifest.json`, and `styles.css` files.
+3. Place them inside a new folder in your vault's plugins directory: `VaultFolder/.obsidian/plugins/obsidian-chatbox-messenger/`.
+4. Reload Obsidian and enable the plugin in your Community Plugins settings.
+
+## 🖱️ Usage Tips
+
+* **Desktop:** The chatbox floats at the bottom of your screen. Click the ribbon icon or use the command palette to toggle its visibility.
+* **Mobile:** If the chatbox is blocking your text, simply **long-press** the background of the chatbox for half a second. It will detach, allowing you to drag it up or down the screen out of your way!
