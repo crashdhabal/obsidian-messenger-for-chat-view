@@ -1,0 +1,10 @@
+{
+	"id": "messenger-for-chat",
+	"name": "Messenger for chat view",
+	"version": "1.0.0",
+	"minAppVersion": "1.0.0",
+	"description": "Gives a messenger/chat like interface to use the chat view plugin by adifyr",
+	"author": "crasshassin",
+	"authorUrl": "https://github.com/crashdhabal",
+	"isDesktopOnly": false
+}

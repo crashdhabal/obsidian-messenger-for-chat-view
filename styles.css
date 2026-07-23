@@ -1,0 +1,116 @@
+/* The main floating chat bar container */
+.chatbox-floating-container {
+    display: flex;
+    align-items: center; /* Ensures dropdown, input, and buttons align vertically */
+    gap: 8px; 
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: var(--background-primary);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--background-modifier-border);
+    width: 95%; 
+    max-width: 600px;
+}
+
+/* MOBILE DEFAULT: Keyboard is closed */
+.is-mobile .chatbox-floating-container {
+    bottom: 70px; /* Floats safely above the Obsidian menu bar */
+    width: 95%;
+    max-width: none;
+    transition: bottom 0.2s ease-out; /* Adds a smooth glide */
+}
+
+/* MOBILE ACTIVE: Keyboard is open */
+.is-mobile .chatbox-floating-container.keyboard-open {
+    /* Because Obsidian shrinks the app window when the keyboard opens, 
+       this pins it 10px above the new bottom (the keyboard) */
+    bottom: 10px; 
+}
+
+/* Styling for the dropdown menu */
+.chatbox-dropdown {
+    flex: 0 0 auto;
+    padding: 6px 8px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background-color: var(--background-secondary);
+    color: var(--text-normal);
+    cursor: pointer;
+}
+
+/* The text input area */
+.chatbox-input {
+    flex:1 1 auto; /* Takes up all remaining space between dropdown and buttons */
+    padding: 8px 12px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background-color: var(--background-secondary);
+    color: var(--text-normal);
+}
+
+/* Shared styling to perfectly center the SVG icons inside buttons */
+.chatbox-send-button,
+.chatbox-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Specific styling for the Send button */
+.chatbox-send-button {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.chatbox-send-button:hover {
+    background-color: var(--interactive-accent-hover);
+}
+
+/* Specific styling for the Scroll down button */
+.chatbox-icon-button {
+    background-color: var(--background-secondary-alt);
+    color: var(--text-normal);
+    border: 1px solid var(--background-modifier-border);
+}
+
+.chatbox-icon-button:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+/* The extra gap requested before the scroll down button */
+.chatbox-scroll-button {
+    margin-left: 50px;
+}
+
+.is-mobile .chatbox-scroll-button {
+    display: none;
+} 
+
+/* The draggable handle */
+.chatbox-drag-handle {
+    position: absolute;
+    top: -12px; /* Juts out above the container */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 6px;
+    background-color: var(--text-muted); /* Blends perfectly with your Obsidian theme */
+    border-radius: 4px;
+    opacity: 0.5;
+    display: none; /* Hidden on desktop */
+}
+
+/* Only reveal the handle on mobile devices */
+.is-mobile .chatbox-drag-handle {
+    display: block;
+}
