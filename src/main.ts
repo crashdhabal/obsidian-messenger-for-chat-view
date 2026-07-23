@@ -26,8 +26,13 @@ export default class MyPlugin extends Plugin {
     // --- GLOBAL EVENT HANDLERS ---
     handleTouchMove = (e: TouchEvent) => {
         if (!this.isDragging) return;
+        
+        // Safely extract the first touch point
+        const touch = e.touches[0];
+        if (!touch) return; 
+
         e.preventDefault(); 
-        const deltaY = e.touches[0].clientY - this.startY;
+        const deltaY = touch.clientY - this.startY;
         this.floatingContainer.style.top = `${this.initialTop + deltaY}px`;
     };
 
@@ -116,7 +121,11 @@ export default class MyPlugin extends Plugin {
         };
 
         this.floatingContainer.addEventListener('touchstart', (e) => {
-            handleInteractStart(e.touches[0].clientX, e.touches[0].clientY, e.target);
+            // Safely extract the first touch point
+            const touch = e.touches[0];
+            if (touch) {
+                handleInteractStart(touch.clientX, touch.clientY, e.target);
+            }
         }, { passive: true });
 
         this.floatingContainer.addEventListener('touchmove', () => {
